@@ -37,16 +37,17 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 *
 		 * TL;DR This is a static property property that holds the singleton instance.
 		 *
+		 * @access	private
 		 * @var		object
 		 * @static
 		 * @since 	1.0
 		 */
 		private static $instance;
 
-
 		/**
 		 * The version number
 		 *
+		 * @access	private
 		 * @since	1.0
 		 */
 		private $version = '1.0';
@@ -57,10 +58,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * Insures that only one instance of AffiliateWP_Flag_Affiliates exists in memory at any one
 		 * time. Also prevents needing to define globals all over the place.
 		 *
-		 * @since 1.0
-		 * @static
-		 * @static var array $instance
-		 * @return The one true AffiliateWP_Flag_Affiliates
+		 * @access	public
+		 * @since	1.0
+		 * @static	var array $instance
+		 * @return	The one true AffiliateWP_Flag_Affiliates
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AffiliateWP_Flag_Affiliates ) ) {
