@@ -200,7 +200,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			$dashicon = apply_filters( 'affiliatewp_flag_affiliates_icon', 'dashicons-flag' );
 
 			if ( $flagged ) {
-				$icon = ' <span class="dashicons ' . $dashicon . '"></span>';
+				$icon = ' <span class="dashicons ' . esc_attr( $dashicon ) . '"></span>';
 			}
 
 			return $affiliate_id . $icon;
@@ -310,6 +310,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				return false;
 			}
 
+			if ( ! $affiliate = affwp_get_affiliate( $data['affiliate_id'] ) ) {
+				return false;
+			}
+
 			if ( ! is_admin() ) {
 				return false;
 			}
@@ -318,8 +322,8 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				wp_die( __( 'You do not have permission to manage affiliates', 'affiliate-wp' ), __( 'Error', 'affiliate-wp' ), array( 'response' => 403 ) );
 			}
 
-			if ( $this->flag_affiliate( $data['affiliate_id'] ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=affiliate-wp-affiliates&action=flag&affwp_notice=affiliate_flagged&affiliate_id=' . $data['affiliate_id'] ) );
+			if ( $this->flag_affiliate( $affiliate->ID ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=affiliate-wp-affiliates&action=flag&affwp_notice=affiliate_flagged&affiliate_id=' . $affiliate->ID ) );
 				exit;
 			} else {
 				wp_safe_redirect( admin_url( 'admin.php?page=affiliate-wp-affiliates&affwp_notice=affiliate_flag_failed' ) );
@@ -342,6 +346,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				return false;
 			}
 
+			if ( ! $affiliate = affwp_get_affiliate( $data['affiliate_id'] ) ) {
+				return false;
+			}
+
 			if ( ! is_admin() ) {
 				return false;
 			}
@@ -351,8 +359,8 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			}
 
 
-			if ( $this->unflag_affiliate( $data['affiliate_id'] ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=affiliate-wp-affiliates&action=flag&affwp_notice=affiliate_unflagged&affiliate_id=' . $data['affiliate_id'] ) );
+			if ( $this->unflag_affiliate( $affiliate->ID ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=affiliate-wp-affiliates&action=flag&affwp_notice=affiliate_unflagged&affiliate_id=' . $affiliate->ID ) );
 				exit;
 			} else {
 				wp_safe_redirect( admin_url( 'admin.php?page=affiliate-wp-affiliates&affwp_notice=affiliate_unflag_failed' ) );
@@ -389,7 +397,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 */
 		public function process_bulk_action_flag( $affiliate_id ) {
 
-			if ( empty( $affiliate_id ) ) {
+			if ( ! $affiliate = affwp_get_affiliate( $affiliate_id ) ) {
 				return;
 			}
 
@@ -397,7 +405,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				return;
 			}
 
-			$this->flag_affiliate( $affiliate_id );
+			$this->flag_affiliate( $affiliate->ID );
 
 		}
 
@@ -411,7 +419,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 */
 		public function process_bulk_action_unflag( $affiliate_id ) {
 
-			if ( empty( $affiliate_id ) ) {
+			if ( ! $affiliate = affwp_get_affiliate( $affiliate_id ) ) {
 				return;
 			}
 
@@ -419,7 +427,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				return;
 			}
 
-			$this->unflag_affiliate( $affiliate_id );
+			$this->unflag_affiliate( $affiliate->ID );
 
 		}
 
@@ -433,11 +441,11 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 */
 		public function flag_affiliate( $affiliate_id = 0 ) {
 
-			if ( empty( $affiliate_id ) ) {
+			if ( ! $affiliate = affwp_get_affiliate( $affiliate_id ) ) {
 				return false;
 			}
 
-			return affwp_update_affiliate_meta( $affiliate_id, 'flagged', true );
+			return affwp_update_affiliate_meta( $affiliate->ID, 'flagged', true );
 
 		}
 
@@ -451,11 +459,11 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 */
 		public function unflag_affiliate( $affiliate_id = 0 ) {
 
-			if ( empty( $affiliate_id ) ) {
+			if ( ! $affiliate = affwp_get_affiliate( $affiliate_id ) ) {
 				return false;
 			}
 
-			return affwp_delete_affiliate_meta( $affiliate_id, 'flagged' );
+			return affwp_delete_affiliate_meta( $affiliate->ID, 'flagged' );
 
 		}
 
@@ -503,7 +511,13 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 */
 		public function update_affiliate( $data ) {
 
-			$affiliate_id = $data['affiliate_id'];
+			if ( empty( $data['affiliate_id'] ) ) {
+				return false;
+			}
+
+			if ( ! $affiliate = affwp_get_affiliate( $data['affiliate_id'] ) ) {
+				return;
+			}
 
 			if ( ! is_admin() ) {
 				return false;
@@ -513,7 +527,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				wp_die( __( 'You do not have permission to manage direct links', 'affiliatewp-direct-link-tracking' ), __( 'Error', 'affiliatewp-direct-link-tracking' ), array( 'response' => 403 ) );
 			}
 
-			$this->flag_affiliate( $affiliate_id );
+			$this->flag_affiliate( $affiliate->ID );
 
 		}
 
