@@ -132,7 +132,15 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 
 			// Set filter for plugin's languages directory
 			$lang_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
-			$lang_dir = apply_filters( 'AffiliateWP_Flag_Affiliates_languages_directory', $lang_dir );
+
+			/**
+			 * Filters the languages directory for AffiliateWP Flag Affiliates plugin.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $lang_dir Language directory.
+			 */
+			$lang_dir = apply_filters( 'affiliatewp_flag_affiliates_languages_directory', $lang_dir );
 
 			// Traditional WordPress plugin locale filter
 			$locale   = apply_filters( 'plugin_locale',  get_locale(), 'affiliatewp-flag-affiliates' );
@@ -193,9 +201,13 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			$flagged = affwp_get_affiliate_meta( $affiliate_id, 'flagged', true );
 
 			/**
-			 * Filters the icon used to flag affiliates
+			 * Filters the icon used to flag affiliates.
 			 *
-			 * @param string $icon The icon to use from https://developer.wordpress.org/resource/dashicons/
+			 * @since 1.0.0
+			 *
+			 * @link https://developer.wordpress.org/resource/dashicons/
+			 *
+			 * @param string $icon The dashicon to use.
 			 */
 			$dashicon = apply_filters( 'affiliatewp_flag_affiliates_icon', 'dashicons-flag' );
 
@@ -223,6 +235,13 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				'disabled' => strtolower( __( 'Unflagged', 'affiliatewp-flag-affiliates' ) )
 			);
 
+			/**
+			 * Filters the list of flagging actions.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array $actions Flagging actions.
+			 */
 			return apply_filters( 'affiliatewp_flag_affiliates_actions', $actions );
 
 		}
@@ -268,7 +287,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 
 			}
 
-			echo '<div class="' . $class . '"><p>' . $notice . '</p></div>';
+			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $notice  ) . '</p></div>';
 
 		}
 
@@ -287,9 +306,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			$flagged = affwp_get_affiliate_meta( $affiliate->ID, 'flagged', true );
 
 			if ( $flagged ) {
-				$row_actions['unflag'] = '<a href="' . wp_nonce_url( admin_url( "admin.php?page=affiliate-wp-affiliates&amp;affiliate_id=$affiliate->ID&amp;affwp_action=unflag&amp;affwp_notice=affiliate_unflagged" ), "affiliate-nonce" ) . '">' . $actions['disable'] . '</a>';
+				$row_actions['unflag'] = '<a href="' . esc_url( wp_nonce_url( admin_url( "admin.php?page=affiliate-wp-affiliates&amp;affiliate_id=$affiliate->ID&amp;affwp_action=unflag&amp;affwp_notice=affiliate_unflagged" ) ), "affiliate-nonce" ) . '">' . $actions['disable'] . '</a>';
 			} else {
-				$row_actions['flag'] = '<a href="' . wp_nonce_url( admin_url( "admin.php?page=affiliate-wp-affiliates&amp;affiliate_id=$affiliate->ID&amp;affwp_action=flag&amp;affwp_notice=affiliate_flagged" ), "affiliate-nonce" ) . '">' . $actions['enable'] . '</a>';
+				$row_actions['flag'] = '<a href="' . esc_url( wp_nonce_url( admin_url( "admin.php?page=affiliate-wp-affiliates&amp;affiliate_id=$affiliate->ID&amp;affwp_action=flag&amp;affwp_notice=affiliate_flagged" ), "affiliate-nonce" ) ) . '">' . $actions['enable'] . '</a>';
 			}
 
 			return $row_actions;
@@ -302,7 +321,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access	public
 		 * @since 	1.0
 		 * @param 	array $data Request data
-		 * @return	void
+		 * @return	void|false
 		 */
 		public function process_flag_affiliate( $data ) {
 
@@ -334,7 +353,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access	public
 		 * @since 	1.0
 		 * @param 	array $data Request data
-		 * @return	void
+		 * @return	void|false
 		 */
 		public function process_unflag_affiliate( $data ) {
 
@@ -385,7 +404,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access	public
 		 * @param	int $affiliate_id ID of the affiliate
 		 * @since	1.0
-		 * @return	void
+		 * @return	void|null
 		 */
 		public function process_bulk_action_flag( $affiliate_id ) {
 
@@ -407,7 +426,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access	public
 		 * @param	int $affiliate_id ID of the affiliate
 		 * @since	1.0
-		 * @return	void
+		 * @return	void|null
 		 */
 		public function process_bulk_action_unflag( $affiliate_id ) {
 
@@ -429,7 +448,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access 	public
 		 * @param 	int $affiliate_id ID of the affiliate
 		 * @since 	1.0
-		 * @return 	void
+		 * @return 	bool
 		 */
 		public function flag_affiliate( $affiliate_id = 0 ) {
 
@@ -447,7 +466,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access	public
 		 * @param	int $affiliate_id ID of the affiliate
 		 * @since	1.0
-		 * @return	void
+		 * @return	bool
 		 */
 		public function unflag_affiliate( $affiliate_id = 0 ) {
 
@@ -476,13 +495,13 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			<tr class="form-row">
 
 				<th scope="row">
-					<label><?php printf( __( '%s Affiliate', 'affiliatewp-flag-affiliates' ), $actions['enable'] ); ?></label>
+					<label><?php printf( esc_html__( '%s Affiliate', 'affiliatewp-flag-affiliates' ), $actions['enable'] ); ?></label>
 				</th>
 
 				<td>
 					<label for="flag-affiliate">
 						<input type="checkbox" name="flag_affiliate" id="flag-affiliate" value="1" <?php checked( $checked, '1' ); ?>/>
-						<?php printf( __( '%s this affiliate', 'affiliatewp-flag-affiliates' ), $actions['enable'] ); ?>
+						<?php printf( esc_html__( '%s this affiliate', 'affiliatewp-flag-affiliates' ), $actions['enable'] ); ?>
 					</label>
 				</td>
 
@@ -498,7 +517,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * @access	public
 		 * @since	1.0
 		 * @param	array $data Request data
-		 * @return	void
+		 * @return	void|false
 		 *
 		 */
 		public function update_affiliate( $data ) {
@@ -533,7 +552,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				$url = admin_url( 'admin.php?page=affiliate-wp-add-ons' );
 
 		        $plugins_link = array(
-		            '<a title="' . __( 'Get more add-ons for AffiliateWP', 'affiliatewp-flag-affiliates' ) . '" href="' . esc_url( $url ) . '">' . __( 'More add-ons', 'affiliatewp-flag-affiliates' ) . '</a>'
+		            '<a title="' . esc_attr__( 'Get more add-ons for AffiliateWP', 'affiliatewp-flag-affiliates' ) . '" href="' . esc_url( $url ) . '">' . __( 'More add-ons', 'affiliatewp-flag-affiliates' ) . '</a>'
 		        );
 
 		        $links = array_merge( $links, $plugins_link );
