@@ -1,7 +1,7 @@
 === AffiliateWP - Flag Affiliates ===
 Contributors: sumobi, mordauk
 Tags: AffiliateWP, affiliate, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing
-Requires at least: 4.2
+Requires at least: 4.4
 Tested up to: 4.7.2
 Stable tag: 1.0.0
 License: GPLv2 or later
