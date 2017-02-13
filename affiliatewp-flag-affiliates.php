@@ -510,7 +510,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			}
 
 			if ( ! current_user_can( 'manage_affiliates' ) ) {
-				wp_die( __( 'You do not have permission to manage direct links', 'affiliatewp-direct-link-tracking' ), __( 'Error', 'affiliatewp-direct-link-tracking' ), array( 'response' => 403 ) );
+				wp_die( __( 'You do not have permission to manage affiliates', 'affiliatewp-flag-affiliates' ), __( 'Error', 'affiliatewp-flag-affiliates' ), array( 'response' => 403 ) );
 			}
 
 			$this->flag_affiliate( $affiliate_id );
