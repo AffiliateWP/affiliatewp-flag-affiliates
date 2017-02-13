@@ -450,6 +450,64 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		}
 
 		/**
+		 * Flag the affiliate from the edit affiliate screen
+		 *
+		 * @access	public
+		 * @param	array $affiliate Affiliate object
+		 * @since	1.0
+		 * @return	void
+		 */
+		public function edit_affiliate( $affiliate ) {
+
+			$actions = $this->actions();
+			$checked = affwp_get_affiliate_meta( $affiliate->affiliate_id, 'flagged', true );
+
+			?>
+			<tr class="form-row">
+
+				<th scope="row">
+					<label><?php printf( __( '%s Affiliate', 'affiliatewp-flag-affiliates' ), $actions['enable'] ); ?></label>
+				</th>
+
+				<td>
+					<label for="flag-affiliate">
+						<input type="checkbox" name="flag_affiliate" id="flag-affiliate" value="1" <?php checked( $checked, '1' ); ?>/>
+						<?php printf( __( '%s this affiliate', 'affiliatewp-flag-affiliates' ), $actions['enable'] ); ?>
+					</label>
+				</td>
+
+			</tr>
+
+		<?php
+
+		}
+
+		/**
+		 * Flag affiliate from the edit affiliate screen
+		 *
+		 * @access	public
+		 * @since	1.0
+		 * @param	array $data Request data
+		 * @return	void
+		 *
+		 */
+		public function update_affiliate( $data ) {
+
+			$affiliate_id = $data['affiliate_id'];
+
+			if ( ! is_admin() ) {
+				return false;
+			}
+
+			if ( ! current_user_can( 'manage_affiliates' ) ) {
+				wp_die( __( 'You do not have permission to manage direct links', 'affiliatewp-direct-link-tracking' ), __( 'Error', 'affiliatewp-direct-link-tracking' ), array( 'response' => 403 ) );
+			}
+
+			$this->flag_affiliate( $affiliate_id );
+
+		}
+
+		/**
 		 * Modify plugin metalinks
 		 *
 		 * @access      public
