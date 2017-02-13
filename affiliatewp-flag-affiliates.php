@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AffiliateWP - Flag Affiliates
  * Plugin URI: https://affiliatewp.com/
- * Description: Flag affiliates for various reasons in AffiliateWP
+ * Description: Flag your affiliates.
  * Author: AffiliateWP, LLC
  * Author URI: https://affiliatewp.com
  * Version: 1.0
@@ -37,9 +37,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 *
 		 * TL;DR This is a static property property that holds the singleton instance.
 		 *
-		 * @var object
+		 * @var		object
 		 * @static
-		 * @since 1.0
+		 * @since 	1.0
 		 */
 		private static $instance;
 
@@ -47,7 +47,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * The version number
 		 *
-		 * @since 1.0
+		 * @since	1.0
 		 */
 		private $version = '1.0';
 
@@ -80,9 +80,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		 * The whole idea of the singleton design pattern is that there is a single
 		 * object therefore, we don't want the object to be cloned.
 		 *
-		 * @since 1.0
-		 * @access protected
-		 * @return void
+ 		 * @access	protected
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function __clone() {
 			// Cloning instances of the class is forbidden
@@ -91,10 +91,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 
 		/**
 		 * Disable unserializing of the class
-		 *
-		 * @since 1.0
-		 * @access protected
-		 * @return void
+		 * @access	protected
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function __wakeup() {
 			// Unserializing instances of the class is forbidden
@@ -103,9 +102,8 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 
 		/**
 		 * Constructor Function
-		 *
-		 * @since 1.0
-		 * @access private
+		 * @access	private
+		 * @since	1.0
 		 */
 		private function __construct() {
 			self::$instance = $this;
@@ -114,8 +112,8 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Reset the instance of the class
 		 *
-		 * @since 1.0
-		 * @access public
+		 * @access	public
+		 * @since	1.0
 		 * @static
 		 */
 		public static function reset() {
@@ -125,9 +123,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Loads the plugin language files
 		 *
-		 * @access public
-		 * @since 1.0
-		 * @return void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function load_textdomain() {
 
@@ -158,9 +156,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Setup the default hooks and actions
 		 *
-		 * @since 1.0
-		 *
-		 * @return void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
 		private function hooks() {
 
@@ -171,6 +169,8 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 			add_action( 'affwp_flag', array( $this, 'process_flag_affiliate' ), 10, 1 );
 			add_action( 'affwp_unflag', array( $this, 'process_unflag_affiliate' ), 10, 1 );
 			add_action( 'admin_notices', array( $this, 'notices' ) );
+			add_action( 'affwp_edit_affiliate_end', array( $this, 'edit_affiliate' ), 10, 1 );
+			add_action( 'affwp_update_affiliate', array( $this, 'update_affiliate' ), -1 );
 
 			// bulk actions
 		//  Uncomment once this issue has been merged - https://github.com/AffiliateWP/AffiliateWP/issues/2016
@@ -182,6 +182,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Add flag icon
 		 *
+		 * @access	public
 		 * @since 	1.0
 		 * @param 	int $affiliate_id ID of the affiliate_id
 		 * @return	string Affiliate ID followed by the icon
@@ -208,6 +209,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Allow the actions to be filtered
 		 *
+		 * @access	public
 		 * @since 	1.0
 		 * @return	array $actions
 		 */
@@ -227,8 +229,9 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Admin notices
 		 *
+		 * @access	public
 		 * @since 	1.0
-		 * @return	null
+		 * @return	void
 		 */
 		public function notices() {
 
@@ -271,6 +274,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Add "flag" row action
 		 *
+		 * @access	public
 		 * @since 	1.0
 		 * @param 	array $row_actions Current row actions
 		 * @param 	object $affiliate Affiliate object
@@ -294,9 +298,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Process the action to flag an affiliate
 		 *
+		 * @access	public
 		 * @since 	1.0
 		 * @param 	array $data Request data
-		 * @return	null
+		 * @return	void
 		 */
 		public function process_flag_affiliate( $data ) {
 
@@ -325,9 +330,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Process the action to unflag an affiliate
 		 *
+		 * @access	public
 		 * @since 	1.0
 		 * @param 	array $data Request data
-		 * @return	null
+		 * @return	void
 		 */
 		public function process_unflag_affiliate( $data ) {
 
@@ -357,9 +363,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Register a new bulk action
 		 *
-		 * @access public
-		 * @since 1.0
-		 * @return array
+		 * @access	public
+		 * @param	array $actions Bulk actions
+		 * @since	1.0
+		 * @return	array $actions
 		 */
 		public function bulk_actions( $actions ) {
 
@@ -374,9 +381,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Process a bulk flag
 		 *
-		 * @access public
-		 * @since 1.0
-		 * @return void
+		 * @access	public
+		 * @param	int $affiliate_id ID of the affiliate
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function process_bulk_action_flag( $affiliate_id ) {
 
@@ -395,9 +403,10 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Process a bulk unflag
 		 *
-		 * @access public
-		 * @since 1.0
-		 * @return void
+		 * @access	public
+		 * @param	int $affiliate_id ID of the affiliate
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function process_bulk_action_unflag( $affiliate_id ) {
 
@@ -427,14 +436,14 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 				return false;
 			}
 
-			return affwp_add_affiliate_meta( $affiliate_id, 'flagged', true );
+			return affwp_update_affiliate_meta( $affiliate_id, 'flagged', true );
 
 		}
 
 		/**
 		 * Unflag an affiliate
 		 *
-		 * @access public
+		 * @access	public
 		 * @param	int $affiliate_id ID of the affiliate
 		 * @since	1.0
 		 * @return	void
