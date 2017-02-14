@@ -180,7 +180,7 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 		/**
 		 * Sets up the default hooks and actions.
 		 *
-		 * @access public
+		 * @access private
 		 * @since  1.0
 		 *
 		 * @return void
