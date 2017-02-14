@@ -217,6 +217,8 @@ if ( ! class_exists( 'AffiliateWP_Flag_Affiliates' ) ) {
 
 			$flagged = affwp_get_affiliate_meta( $affiliate_id, 'flagged', true );
 
+			$icon = '';
+
 			/**
 			 * Filters the icon used to flag affiliates.
 			 *
