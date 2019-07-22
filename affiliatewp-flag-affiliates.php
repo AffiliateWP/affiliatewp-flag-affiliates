@@ -3,8 +3,8 @@
  * Plugin Name: AffiliateWP - Flag Affiliates
  * Plugin URI: https://affiliatewp.com/
  * Description: Flag your affiliates.
- * Author: AffiliateWP, LLC
- * Author URI: https://affiliatewp.com
+ * Author: Sandhills Development, LLC
+ * Author URI: https://sandhillsdev.com
  * Version: 1.0
  * Text Domain: affiliatewp-flag-affiliates
  * Domain Path: languages
